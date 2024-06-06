@@ -14,15 +14,16 @@
         padding: 20px;
       }
       .table-container {
-/*           max-height: 400px; */
           overflow-y: auto;
           background-color: #f8f9fa;
-/*           border: 1px solid #dee2e6; */
           padding: 15px; 
           border-radius: 10px;
           margin-bottom: 30px;
       }
-      a .btn-link {
+      .table-hover tbody tr:hover {
+        background-color: #e9ecef;
+      }
+      a, .btn-link {
         text-decoration: none;
       }
     </style>
@@ -150,12 +151,12 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th><button class="btn btn-link" onclick="sortTable('name')">運動名稱</button></th>
-                            <th><button class="btn btn-link" onclick="sortTable('goal')">健康目標</button></th>
-                            <th><button class="btn btn-link" onclick="sortTable('frequency')">頻率(次/週)</button></th>
-                            <th><button class="btn btn-link" onclick="sortTable('duration')">時長(分鐘/次)</button></th>
-                            <th><button class="btn btn-link" onclick="sortTable('intensity')">運動強度</button></th>
-                            <th><button class="btn btn-link" onclick="sortTable('bodyPart')">鍛鍊部位</button></th>
+                            <th class="text-start fw-bold"><button class="btn btn-link" onclick="sortTable('name')">運動名稱</button></th>
+                            <th class="text-start fw-bold"><button class="btn btn-link" onclick="sortTable('goal')">健康目標</button></th>
+                            <th class="text-start fw-bold"><button class="btn btn-link" onclick="sortTable('frequency')">頻率(次/週)</button></th>
+                            <th class="text-start fw-bold"><button class="btn btn-link" onclick="sortTable('duration')">時長(分鐘/次)</button></th>
+                            <th class="text-start fw-bold"><button class="btn btn-link" onclick="sortTable('intensity')">運動強度</button></th>
+                            <th class="text-start fw-bold"><button class="btn btn-link" onclick="sortTable('bodyPart')">鍛鍊部位</button></th>
                         </tr>
                     </thead>
                     <tbody id="exerciseTableBody">
@@ -163,8 +164,8 @@
             if (data.length > 0) {
                 data.forEach(exercise => {
                     tableContent += `
-                        <tr>
-                            <td><a href="https://www.google.com/search?q=${exercise.name}" target="_blank">${exercise.name}</a></td>
+                        <tr onclick="window.open('https://www.google.com/search?q=${exercise.name}', '_blank')">
+                            <td>${exercise.name}</td>
                             <td>${exercise.goal}</td>
                             <td>${exercise.frequency}</td>
                             <td>${exercise.duration}</td>
