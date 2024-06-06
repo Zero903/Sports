@@ -165,12 +165,12 @@
                 data.forEach(exercise => {
                     tableContent += `
                         <tr onclick="window.open('https://www.google.com/search?q=${exercise.name}', '_blank')">
-                            <td>${exercise.name}</td>
-                            <td>${exercise.goal}</td>
-                            <td>${exercise.frequency}</td>
-                            <td>${exercise.duration}</td>
-                            <td>${exercise.intensity}</td>
-                            <td>${exercise.bodyPart}</td>
+                            <td class="text-start">${exercise.name}</td>
+                            <td class="text-start">${exercise.goal}</td>
+                            <td class="text-start">${exercise.frequency}</td>
+                            <td class="text-start">${exercise.duration}</td>
+                            <td class="text-start">${exercise.intensity}</td>
+                            <td class="text-start">${exercise.bodyPart}</td>
                         </tr>
                     `;
                 });
