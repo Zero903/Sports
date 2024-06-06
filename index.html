@@ -62,24 +62,17 @@
     };
 
 
-    async function fetchExerciseData() {
-        try {
-            const response = await fetch('https://script.google.com/macros/s/AKfycbxtzIlVBMWR8hI-V7zTXU4jVitmQ2ahl6MDc2bCjhZd5WNbAeWJffrbUzDZxREuQhScPg/exec', {
-                mode: 'no-cors',
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            processData(data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
+async function fetchExerciseData() {
+    try {
+        const response = await fetch('https://script.google.com/macros/s/YOUR_WEB_APP_URL/exec', {
+            mode: 'no-cors'
+        });
+        const data = await response.text();
+        processData(data);
+    } catch (error) {
+        console.error('Error fetching data:', error);
     }
+}
 
     function processData(data) {
         exerciseData = data;
