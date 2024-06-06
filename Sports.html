@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>運動建議</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <header class="mb-4">
+            <h1 class="text-center">運動建議</h1>
+        </header>
+        <section class="mb-4">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="goal" class="form-label">健康目標：</label>
+                    <select id="goal" class="form-select">
+                        <!-- 選項會由 JavaScript 動態生成 -->
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="intensity" class="form-label">運動強度：</label>
+                    <select id="intensity" class="form-select">
+                        <!-- 選項會由 JavaScript 動態生成 -->
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="bodyPart" class="form-label">鍛鍊部位：</label>
+                    <select id="bodyPart" class="form-select">
+                        <!-- 選項會由 JavaScript 動態生成 -->
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-primary mt-3" onclick="generateSuggestions()">生成建議</button>
+        </section>
+        <section id="suggestions" class="mt-4">
+            <!-- 運動建議將顯示在這裡 -->
+        </section>
+        <footer class="text-center mt-5">
+            <p>運動建議網頁 © 2024</p>
+        </footer>
+    </div>
+
+</body>
+
+<script>
+    let exerciseData = [];
+
+    window.onload = function() {
+        fetchExerciseData();
+    };
+
+
+    async function fetchExerciseData() {
+        try {
+            const response = await fetch('https://script.google.com/macros/s/AKfycbxtzIlVBMWR8hI-V7zTXU4jVitmQ2ahl6MDc2bCjhZd5WNbAeWJffrbUzDZxREuQhScPg/exec', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            processData(data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    function processData(data) {
+        exerciseData = data;
+        populateFilters();
+    }
+
+    function populateFilters() {
+        const goals = [...new Set(exerciseData.map(ex => ex.goal))];
+        const intensities = [...new Set(exerciseData.map(ex => ex.intensity))];
+        const bodyParts = [...new Set(exerciseData.map(ex => ex.bodyPart))];
+
+        populateSelect('goal', goals);
+        populateSelect('intensity', intensities);
+        populateSelect('bodyPart', bodyParts);
+    }
+
+    function populateSelect(id, options) {
+        const select = document.getElementById(id);
+        options.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option;
+            opt.textContent = option;
+            select.appendChild(opt);
+        });
+    }
+
+    function generateSuggestions() {
+        const goal = document.getElementById('goal').value;
+        const intensity = document.getElementById('intensity').value;
+        const bodyPart = document.getElementById('bodyPart').value;
+
+        const suggestions = exerciseData.filter(exercise =>
+            exercise.goal === goal &&
+            exercise.intensity === intensity &&
+            exercise.bodyPart === bodyPart
+        );
+
+        let suggestionText = '<h3 class="text-center">根據您的選擇，這是一些適合的運動建議：</h3>';
+        if (suggestions.length > 0) {
+            suggestions.forEach(suggestion => {
+                suggestionText += `<p>${suggestion.name} - ${suggestion.frequency}次/週, 每次${suggestion.duration}分鐘</p>`;
+            });
+        } else {
+            suggestionText += '<p class="text-center">沒有符合條件的運動建議。</p>';
+        }
+
+        document.getElementById('suggestions').innerHTML = suggestionText;
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+
+</html>
