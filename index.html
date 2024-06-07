@@ -54,6 +54,9 @@
                     </select>
                 </div>
             </div>
+            <div class="text-end mt-2">
+                <button class="btn btn-secondary" onclick="clearFilters()">清除所有選項</button>
+            </div>
         </section>
         <section id="suggestions" class="mt-4 table-container">
             <!-- 運動建議將顯示在這裡 -->
@@ -116,22 +119,34 @@
 
         let currentSortColumn = '';
         let currentSortOrder = 'asc';
-        
+                
         function sortTable(column) {
+            const goal = document.getElementById('goal').value;
+            const intensity = document.getElementById('intensity').value;
+            const bodyPart = document.getElementById('bodyPart').value;
+        
+            const filteredData = exerciseData.filter(exercise =>
+                (goal === '' || exercise.goal === goal) &&
+                (intensity === '' || exercise.intensity === intensity) &&
+                (bodyPart === '' || exercise.bodyPart === bodyPart)
+            );
+        
             if (currentSortColumn === column) {
                 currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
             } else {
                 currentSortColumn = column;
                 currentSortOrder = 'asc';
             }
-            const sortedData = [...exerciseData].sort((a, b) => {
+        
+            const sortedData = filteredData.sort((a, b) => {
                 if (a[column] < b[column]) return currentSortOrder === 'asc' ? -1 : 1;
                 if (a[column] > b[column]) return currentSortOrder === 'asc' ? 1 : -1;
                 return 0;
             });
+        
             displayExerciseData(sortedData);
         }
-    
+
         function filterExerciseData() {
             const goal = document.getElementById('goal').value;
             const intensity = document.getElementById('intensity').value;
@@ -187,6 +202,14 @@
             `;
             document.getElementById('suggestions').innerHTML = tableContent;
         }
+
+        function clearFilters() {
+          document.getElementById('goal').value = '';
+          document.getElementById('intensity').value = '';
+          document.getElementById('bodyPart').value = '';
+          displayExerciseData(exerciseData);
+      }
+
     </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </html>
